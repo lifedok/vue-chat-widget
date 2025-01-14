@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { clearChatHistory, saveMessage } from '@/shared/dbHelpers.ts'
+import { clearChatHistory, saveMessage } from '@/idb/dbHelpers.ts'
 import type { IConversationItem } from '@/types/conversation-item.ts'
 
 const chatHistory = ref<IConversationItem[]>([])

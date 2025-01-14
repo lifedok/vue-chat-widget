@@ -11,7 +11,7 @@ export const transformText = (text: string): string => {
     .split(' ')
     .map((word) => {
       const symbols = [...word]
-      const letters = symbols.filter((symbol) => /\p{L}/u.test(symbol)) // RegExp.prototype.test
+      const letters = symbols.filter((symbol) => /\p{L}/u.test(symbol))
       const reversedLetters = reverseString(letters.join('')).split('')
 
       return symbols

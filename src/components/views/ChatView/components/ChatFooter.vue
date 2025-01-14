@@ -44,6 +44,7 @@ const sendMessage = () => {
 
 onMounted(() => {
   textareaHeight.value = rowHeight;
+  textarea.value?.focus();
 });
 
 </script>
