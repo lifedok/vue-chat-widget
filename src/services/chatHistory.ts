@@ -1,18 +1,20 @@
 import { ref } from 'vue'
-import { saveMessage } from '@/shared/dbHelpers.ts'
+import { clearChatHistory, saveMessage } from '@/shared/dbHelpers.ts'
+import type { IConversationItem } from '@/types/conversation-item.ts'
 
-const chatHistory = ref<{ sender: string; text: string }[]>([])
+const chatHistory = ref<IConversationItem[]>([])
 
-export const addMessageToHistory = (message: { sender: string; text: string, timestamp?: Date }, saveToDB = true) => {
-  const messageWithTimestamp = {
-    ...message,
-    timestamp: message.timestamp || Date.now(),
-  };
-
-  chatHistory.value.unshift(messageWithTimestamp)
+export const addMessageToHistory = (message: IConversationItem, saveToDB = true) => {
+  chatHistory.value.unshift(message)
   if (saveToDB) {
-    saveMessage(messageWithTimestamp);
+    saveMessage(message);
   }
 }
 
 export const getChatHistory = () => chatHistory.value
+
+export const clearMessageFromHistory = async () => {
+  chatHistory.value = [];
+  await clearChatHistory();
+  console.log('Chat history cleared.');
+};

@@ -1,5 +1,6 @@
 :root {
   --vt-c-Teal600: #0d9488;
+  --vt-c-Teal500: #14b8a6;
   --vt-c-Khaki: #f0e68c;
   --vt-c-Gold: #ffd700;
   --vt-c-white: #ffffff;
@@ -16,6 +17,7 @@
 :root {
   --color-primary-background: var(--vt-c-Teal600);
   --color-primary-background-active: var(--vt-c-divider-light-1);
+  --color-primary-background-hover: var(--vt-c-Teal500);
   --color-text-primary: var(--vt-c-indigo);
   --color-text-secondary: var(--vt-c-white);
 
@@ -32,6 +34,8 @@ html {
 html.dark {
   --color-primary-background: var(--vt-c-Khaki);
   --color-primary-background-active: var(--vt-c-Gold);
+  --color-primary-background-hover: var(--vt-c-Gold);
+
   --color-text-primary: var(--vt-c-indigo);
   --color-text-secondary: var(--vt-c-indigo);
   --color-background: var(--vt-c-indigo);

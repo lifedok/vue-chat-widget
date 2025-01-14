@@ -2,12 +2,13 @@
 import { provide, ref } from 'vue'
 import ChatView from '@/components/views/ChatView/ChatView.vue'
 import WelcomeView from '@/components/views/WelcomeView/WelcomeView.vue'
-
+defineEmits(['resetChat']);
 const isConversationView = ref(true)
 const toggleView = () => {
   isConversationView.value = !isConversationView.value
 }
 provide('toggleView', toggleView)
+
 </script>
 
 <template>
@@ -16,7 +17,7 @@ provide('toggleView', toggleView)
       <WelcomeView />
     </div>
     <div class="widget-chat-view" v-else>
-      <ChatView />
+      <ChatView @resetChat="$emit('resetChat')"/>
     </div>
   </div>
 </template>

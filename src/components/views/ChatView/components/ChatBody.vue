@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import ChatAvatar from '@/components/simple/ChatAvatar.vue'
+import type { IConversationItem } from '@/types/conversation-item.ts'
 
 defineProps({
   messages: {
-    type: Array as () => Array<{ sender: string; text: string }>,
+    type: Array as () => Array<IConversationItem>,
     required: true,
   },
   isTyping: {

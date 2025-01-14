@@ -23,12 +23,16 @@ export const transformText = (text: string): string => {
 
 export const delay = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
 
+export const encodeBase64 = (input: string): string => {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(input);
+  return btoa(String.fromCharCode(...data));
+};
 
-export const encodeBase64 = (text: string): string => {
-  const bytes = new TextEncoder().encode(text)
-  let base64 = ''
-  bytes.forEach((byte) => {
-    base64 += String.fromCharCode(byte)
-  })
-  return btoa(base64)
-}
+export const decodeBase64 = (input: string): string => {
+  const decoded = atob(input);
+  const data = new Uint8Array([...decoded].map(char => char.charCodeAt(0)));
+  const decoder = new TextDecoder();
+  return decoder.decode(data);
+};
+

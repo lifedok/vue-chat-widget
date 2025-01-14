@@ -26,24 +26,30 @@ const toggleDark = inject('toggleDark', () => {});
 .dark-mode-btn {
   display: flex;
   align-items: center;
-  padding: 3px 15px;
+  padding: 2px 6px;
   background-color: var(--color-primary-background);
   border: none;
   outline: none;
   color: var(--color-text-secondary);
-  margin: .5rem 0;
   border-radius: 4px;
-  font-size: 1rem;
   box-sizing: border-box;
   vertical-align: middle;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
+.dark-mode-btn:hover {
+  background-color: var(--color-primary-background-hover);
+}
+
 .dark-mode-btn-content {
   display: flex;
   align-items: center;
   gap: 4px;
   background-color: transparent;
+  font-size: 12px;
+}
+.dark-mode-btn-content svg {
+  width: 14px;
 }
 
 </style>

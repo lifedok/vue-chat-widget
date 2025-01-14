@@ -2,16 +2,16 @@
 import ChatHeader from '@/components/views/ChatView/components/ChatHeader.vue'
 import ChatBody from '@/components/views/ChatView/components/ChatBody.vue'
 import ChatFooter from '@/components/views/ChatView/components/ChatFooter.vue'
-import { ref } from 'vue'
+import { inject, ref } from 'vue'
 import { transformText, reverseString, delay } from '@/shared/helpers.tsx'
 import { addMessageToHistory, getChatHistory } from '@/services/chatHistory.ts'
+import { greetings, maxMessages } from '@/shared/const.ts'
+const chatEnded = inject('chatEnded', ref(false));
+const emit = defineEmits(['resetChat']);
 
-const greetings = ['hi', 'hello', 'привет', 'tere', 'здравствуйте'];
-const maxMessages = 3; // 20
 let hasGreeted = false;
 
 const isTyping = ref(false);
-const chatEnded = ref(false);
 
 const responseQueue: Array<() => void> = [];
 
@@ -42,7 +42,8 @@ const sendGoodbyeMsg = () => {
       sender: 'bot',
       text: "My limit is exhausted, I can't write anymore. Goodbye!",
     });
-    chatEnded.value = true;
+
+    emit('resetChat');
   });
 }
 
@@ -73,6 +74,7 @@ const handleMessage = (text: string) => {
       const response = getRandomResponse(text);
       responseQueue.push(() => {
         addMessageToHistory({ sender: 'bot', text: response });
+        console.log('addMessageToHistory', getChatHistory())
       });
       if (getChatHistory().length > maxMessages) {
         sendGoodbyeMsg();

@@ -9,7 +9,7 @@ const toggleView = inject('toggleView');
   <div class="new-conversation">
     <button class="new-conversation-btn" @click="toggleView">
       <IconSendHorizontal/>
-      New Conversation
+      Conversation
     </button>
   </div>
 </template>

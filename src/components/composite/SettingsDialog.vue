@@ -2,24 +2,17 @@
 import ButtonIcon from '@/components/simple/ButtonIcon.vue'
 import IconClose from '@/components/icons/IconClose.vue'
 import SelectComp from '@/components/simple/SelectComp.vue'
-import { ref, watch } from 'vue'
-import { clearChatHistory } from '@/shared/dbHelpers.ts'
+import { inject, ref } from 'vue'
 import DarkMode from '@/components/composite/DarkMode.vue'
+import { useSettingsStore } from '@/stores/settings'
+import IconTrash from '@/components/icons/IconTrash.vue'
+import { getChatHistory } from '@/services/chatHistory.ts'
+
+const resetChatManually = inject('resetChatManually')
 
 const emit = defineEmits(['close'])
 const isVisible = ref(true)
-
-const expirationOptions = ref([
-  { text: '1 min', value: '1' },
-  { text: '5 min', value: '5' },
-  { text: '10 min', value: '10' },
-  { text: '30 min', value: '30' },
-  { text: '4 hour', value: '240' },
-  { text: '1 day', value: '1440' },
-  { text: '1 week', value: '10080' },
-])
-
-const selectedExpiration = ref(expirationOptions.value[1].value) // Default: 5 min
+const settingsStore = useSettingsStore()
 
 const handleOverlayClick = (event: MouseEvent) => {
   const target = event.target as HTMLElement
@@ -31,13 +24,10 @@ const handleOverlayClick = (event: MouseEvent) => {
 
 const closeDialog = () => {
   isVisible.value = false
-  setTimeout(() => emit('close'), 200)
+  setTimeout(() => emit('close'), 400)
 }
 
-watch(selectedExpiration, (newValue) => {
-  console.log(`History expiration updated to ${newValue} minutes.`)
-  clearChatHistory()
-})
+console.log('getChatHistory().length', !getChatHistory().length)
 </script>
 
 <template>
@@ -52,8 +42,21 @@ watch(selectedExpiration, (newValue) => {
         <h3 class="settings-dialog-title">Settings</h3>
         <div class="settings-dialog-list">
           <div class="settings-dialog-item">
-            <p>How long does the history last?</p>
-            <SelectComp :options="expirationOptions" v-model="selectedExpiration" />
+            <p>How long should I keep my chat history?</p>
+            <div class="settings-dialog-choose">
+              <SelectComp
+                :options="settingsStore.expirationOptions"
+                v-model="settingsStore.selectedExpiration"
+              />
+              <button
+                class="settings-dialog-remove"
+                @click="resetChatManually"
+                :disabled="!getChatHistory().length"
+              >
+                <IconTrash />
+                Remove now
+              </button>
+            </div>
           </div>
           <div class="settings-dialog-item">
             <DarkMode />
@@ -137,10 +140,53 @@ watch(selectedExpiration, (newValue) => {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: 4px;
   width: 100%;
   border-radius: 6px;
-  padding: 4px 8px;
+  padding: 6px 8px;
   background: var(--color-background-item);
   color: var(--color-text-primary);
+}
+
+.settings-dialog-choose {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.settings-dialog-remove {
+  width: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  background-color: var(--color-primary-background);
+  border: none;
+  outline: none;
+  color: var(--color-text-secondary);
+  border-radius: 4px;
+  font-size: 12px;
+  box-sizing: border-box;
+  vertical-align: middle;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+.settings-dialog-remove:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.settings-dialog-remove:disabled:hover {
+  background-color: var(--color-primary-background);
+}
+
+.settings-dialog-remove:hover {
+  background-color: var(--color-primary-background-hover);
+}
+
+.settings-dialog-remove svg {
+  width: 14px;
 }
 </style>
