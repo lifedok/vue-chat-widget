@@ -6,7 +6,10 @@ import { onMounted, provide, ref, watch } from 'vue'
 import { initDB, loadChatHistory } from '@/shared/dbHelpers.ts'
 import { addMessageToHistory, clearMessageFromHistory } from '@/services/chatHistory.ts'
 import { useSettingsStore } from '@/stores/settings.ts'
+import { DELAY_WIDGET_SHOW, TIME_RATIO } from '@/shared/const.ts'
 const isWidgetVisible = ref(false)
+const currentMessageCount = ref(0);
+provide('currentMessageCount', currentMessageCount);
 
 const chatEnded = ref(false);
 provide('chatEnded', chatEnded);
@@ -22,7 +25,7 @@ let clearChatTimer: NodeJS.Timeout | null = null;
 const delayWidgetShow = () => {
   setTimeout(() => {
     isWidgetVisible.value = true;
-  }, 7000); // 7 sec
+  }, DELAY_WIDGET_SHOW);
 }
 
 onMounted(async () => {
@@ -30,15 +33,16 @@ onMounted(async () => {
   delayWidgetShow();
   const history = await loadChatHistory();
   history.forEach((message) => addMessageToHistory(message, false));
+  currentMessageCount.value = 0;
 
   startClearChatTimer();
 });
 
-const transformToMs = () => {
-  return +settingsStore.selectedExpiration * 60000; // * 60 * 1000
+const transformToMs = ():number => {
+  return +settingsStore.selectedExpiration * TIME_RATIO;
 }
 
-const handleClearChatHistory = async () => {
+const handleClearChatHistory = async ():void => {
   await clearMessageFromHistory();
   chatEnded.value = false;
   console.log('Chat history cleared.');
@@ -52,14 +56,14 @@ const startClearChatTimer = () => {
     handleClearChatHistory();
   }, expirationTime);
 
-  console.log(`Timer set for ${expirationTime / 1000 / 60} minutes.`);
+  console.log(`Timer set for ${expirationTime / TIME_RATIO} minutes.`);
 };
 
-const resetChat = () => {
+const resetChat = ():boolean => {
   chatEnded.value = true;
 };
 
-const resetChatManually = async () => {
+const resetChatManually = async ():void => {
   chatEnded.value = false;
   await clearMessageFromHistory();
   console.log('Chat history cleared manually.');
@@ -67,14 +71,12 @@ const resetChatManually = async () => {
 };
 provide('resetChatManually', resetChatManually)
 
-// chatEnded фолс, если не достигнуто maxMessages или было обновление страницы
-
 watch(() => settingsStore.selectedExpiration, (newValue) => {
   console.log(`Expiration time changed to ${newValue} minutes.`);
+  settingsStore.updateSelectedExpiration(newValue);
   startClearChatTimer();
 });
 
-console.log('settingsStore', settingsStore.selectedExpiration)
 </script>
 
 
