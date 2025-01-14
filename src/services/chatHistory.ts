@@ -11,7 +11,7 @@ export const addMessageToHistory = (message: { sender: string; text: string, tim
 
   chatHistory.value.unshift(messageWithTimestamp)
   if (saveToDB) {
-    saveMessage(message);
+    saveMessage(messageWithTimestamp);
   }
 }
 

@@ -2,26 +2,18 @@
 import ChatHeader from '@/components/views/ChatView/components/ChatHeader.vue'
 import ChatBody from '@/components/views/ChatView/components/ChatBody.vue'
 import ChatFooter from '@/components/views/ChatView/components/ChatFooter.vue'
-import { computed, onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { transformText, reverseString, delay } from '@/shared/helpers.tsx'
-import { initDB, loadChatHistory } from '@/shared/dbHelpers.ts'
 import { addMessageToHistory, getChatHistory } from '@/services/chatHistory.ts'
 
 const greetings = ['hi', 'hello', 'привет', 'tere', 'здравствуйте'];
 const maxMessages = 3; // 20
 let hasGreeted = false;
 
-// const messages = ref<{ sender: string; text: string }[]>([]);
 const isTyping = ref(false);
 const chatEnded = ref(false);
 
 const responseQueue: Array<() => void> = [];
-
-onMounted(async () => {
-  await initDB();
-  const history = await loadChatHistory();
-  history.forEach((message) => addMessageToHistory(message, false));
-});
 
 const getRandomResponse = (text: string): string => {
   const scenarios = [reverseString(text), transformText(text)];

@@ -29,7 +29,7 @@
 .welcome-header {
   font-size: 32px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--color-text-secondary);
 }
 @media (max-width: 420px) {
   .welcome-header {
@@ -39,7 +39,7 @@
 .welcome-description {
   margin: 10px 0;
   font-size: 16px;
-  color: #ffffff;
+  color: var(--color-text-secondary);
 }
 
 @media (max-width: 420px) {

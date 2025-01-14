@@ -22,19 +22,13 @@ const closeDialogInfo = () => {
     </button>
 
     <button
-      class="chat-header-action"
-      :class="['chat-header-action-isActive', showDialogInfo]"
+      :class="[{'chat-header-action': true, 'chat-header-action--isActive': showDialogInfo}]"
       @click="openDialogInfo">
       <IconBurger/>
     </button>
   </div>
 
-  <SettingsDialog v-if="showDialogInfo" @close="closeDialogInfo">
-    <div>
-      <p>How long does the history last?</p>
-      <span>5 min</span>
-    </div>
-  </SettingsDialog>
+  <SettingsDialog v-if="showDialogInfo" @close="closeDialogInfo"/>
 </template>
 
 <style scoped>
@@ -53,12 +47,16 @@ const closeDialogInfo = () => {
   align-items: center;
   justify-content: center;
   background: var(--color-primary-background);
-  color: white;
+  color: var(--color-text-secondary);
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 .chat-header-action:hover {
-  background-color: var(--vt-c-divider-light-1);
+  background-color: var(--color-primary-background-active);
+}
+.chat-header-action--isActive {
+  background-color: var(--color-primary-background-active);
 }
 </style>
+

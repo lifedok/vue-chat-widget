@@ -23,7 +23,7 @@ provide('toggleView', toggleView)
 
 <style scoped>
 .widget-content {
-  background-color: #f7f7f9;
+  background-color: var(--color-background-optional);
   width: 348px;
   height: 524px;
   border-radius: 10px;

@@ -6,7 +6,7 @@
 
 <style>
 .btn-icon {
-  color: #fff;
+  color: var(--color-text-secondary);
   cursor: pointer;
   background-color: var(--color-primary-background);
   border-radius: 50%;

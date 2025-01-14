@@ -43,7 +43,7 @@ const toggleView = inject('toggleView');
   text-align: center;
   text-decoration: none;
   background-color: var(--color-primary-background);
-  color: #ffffff;
+  color: var(--color-text-secondary);
   display: flex;
   align-items: center;
   width: 100%;
