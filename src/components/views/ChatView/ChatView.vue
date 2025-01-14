@@ -25,8 +25,16 @@ const getRandomResponse = (text: string): string => {
 const processResponseQueue = async () => {
   if (isTyping.value || responseQueue.length === 0) return
 
+  if (currentMessageCount.value > MAX_MESSAGES_PER_SESSION) {
+    console.log('Message limit reached, ending the chat.');
+    sendGoodbyeMsg();
+    responseQueue.length = 0;
+    return;
+  }
+
   const nextResponse = responseQueue.shift()
   if (nextResponse) {
+    await delay(500)
     isTyping.value = true
     await delay(2000)
     isTyping.value = false
@@ -39,15 +47,12 @@ const processResponseQueue = async () => {
 }
 
 const sendGoodbyeMsg = () => {
-  responseQueue.push(() => {
-    addMessageToHistory({
-      sender: 'bot',
-      text: "My limit is exhausted, I can't write anymore. Goodbye!",
-    })
-
-    emit('resetChat')
-  })
-}
+  addMessageToHistory({
+    sender: 'bot',
+    text: "My limit is exhausted, I can't write anymore. Goodbye!",
+  });
+  emit('resetChat');
+};
 
 const sendWelcomeMsg = () => {
   responseQueue.push(() => {
@@ -59,7 +64,6 @@ const sendWelcomeMsg = () => {
 }
 
 const handleMessage = (text: string) => {
-  console.log('handleMessage', text);
   currentMessageCount.value++
 
   addMessageToHistory({ sender: 'user', text })
@@ -78,14 +82,7 @@ const handleMessage = (text: string) => {
     responseQueue.push(() => {
       addMessageToHistory({ sender: 'bot', text: response });
       currentMessageCount.value++;
-      if (currentMessageCount.value > MAX_MESSAGES_PER_SESSION) {
-        sendGoodbyeMsg();
-        currentMessageCount.value++;
-        return;
-      }
     })
-
-    console.log('currentMessageCount', currentMessageCount.value)
     processResponseQueue()
   }
 }

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
-import { EXPIRATION_TIME } from '@/shared/const.ts'
+
+const expirationTimeMin: number = 5;
 
 const saveToLocalStorage = (key: string, value: never) => {
   localStorage.setItem(key, JSON.stringify(value));
@@ -13,16 +14,16 @@ const loadFromLocalStorage = (key: string, defaultValue: never) => {
 export const useSettingsStore = defineStore('settings', {
   state: () => ({
     expirationOptions: [
-      { text: '1 min', value: '1' },
-      { text: '3 min', value: '3' },
-      { text: '5 min', value: '5' },
-      { text: '10 min', value: '10' },
-      { text: '30 min', value: '30' },
-      { text: '4 hour', value: '240' },
-      { text: '1 day', value: '1440' },
-      { text: '1 week', value: '10080' },
+      { text: '1 min', value: 1 },
+      { text: '3 min', value: 3 },
+      { text: '5 min', value: 5 },
+      { text: '10 min', value: 10 },
+      { text: '30 min', value: 30 },
+      { text: '4 hour', value: 240 },
+      { text: '1 day', value: 1440 },
+      { text: '1 week', value: 10080 },
     ],
-    selectedExpiration: loadFromLocalStorage('selectedExpiration', EXPIRATION_TIME),
+    selectedExpiration: loadFromLocalStorage('selectedExpiration', expirationTimeMin),
   }),
   actions: {
     updateSelectedExpiration(value: string) {

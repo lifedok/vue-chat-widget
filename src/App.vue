@@ -6,7 +6,7 @@ import { onMounted, provide, ref, watch } from 'vue'
 import { initDB, loadChatHistory } from '@/shared/dbHelpers.ts'
 import { addMessageToHistory, clearMessageFromHistory } from '@/services/chatHistory.ts'
 import { useSettingsStore } from '@/stores/settings.ts'
-import { DELAY_WIDGET_SHOW, TIME_RATIO } from '@/shared/const.ts'
+import { DELAY_WIDGET_SHOW_MS, TIME_RATIO_MS } from '@/shared/const.ts'
 const isWidgetVisible = ref(false)
 const currentMessageCount = ref(0);
 provide('currentMessageCount', currentMessageCount);
@@ -25,7 +25,7 @@ let clearChatTimer: NodeJS.Timeout | null = null;
 const delayWidgetShow = () => {
   setTimeout(() => {
     isWidgetVisible.value = true;
-  }, DELAY_WIDGET_SHOW);
+  }, DELAY_WIDGET_SHOW_MS);
 }
 
 onMounted(async () => {
@@ -39,12 +39,14 @@ onMounted(async () => {
 });
 
 const transformToMs = ():number => {
-  return +settingsStore.selectedExpiration * TIME_RATIO;
+  return settingsStore.selectedExpiration * TIME_RATIO_MS;
 }
 
-const handleClearChatHistory = async ():void => {
-  await clearMessageFromHistory();
+const handleResetChatHistory = async ():void => {
   chatEnded.value = false;
+  currentMessageCount.value = 0;
+  await clearMessageFromHistory();
+  startClearChatTimer();
   console.log('Chat history cleared.');
 };
 
@@ -53,23 +55,17 @@ const startClearChatTimer = () => {
 
   const expirationTime = transformToMs();
   clearChatTimer = setTimeout(() => {
-    handleClearChatHistory();
+    handleResetChatHistory();
   }, expirationTime);
 
-  console.log(`Timer set for ${expirationTime / TIME_RATIO} minutes.`);
+  console.log(`Timer set for ${expirationTime / TIME_RATIO_MS} minutes.`);
 };
 
 const resetChat = ():boolean => {
   chatEnded.value = true;
 };
 
-const resetChatManually = async ():void => {
-  chatEnded.value = false;
-  await clearMessageFromHistory();
-  console.log('Chat history cleared manually.');
-  startClearChatTimer();
-};
-provide('resetChatManually', resetChatManually)
+provide('resetChatManually', handleResetChatHistory)
 
 watch(() => settingsStore.selectedExpiration, (newValue) => {
   console.log(`Expiration time changed to ${newValue} minutes.`);

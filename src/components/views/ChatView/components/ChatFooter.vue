@@ -10,12 +10,12 @@ const props = defineProps({
   }
 })
 
-const rowHeight = 16;
+const rowHeight: number = 16;
 const textareaHeight = ref(rowHeight);
 
 const message = ref("");
 const textarea = ref<HTMLTextAreaElement | null>(null);
-const maxRows = 8;
+const maxRows: number = 8;
 const emit = defineEmits<{
   (event: 'sendMessage', message: string): void;
 }>();

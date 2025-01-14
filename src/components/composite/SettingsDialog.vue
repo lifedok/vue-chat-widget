@@ -27,7 +27,6 @@ const closeDialog = () => {
   setTimeout(() => emit('close'), 400)
 }
 
-console.log('getChatHistory().length', !getChatHistory().length)
 </script>
 
 <template>

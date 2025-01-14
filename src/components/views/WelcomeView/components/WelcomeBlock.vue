@@ -7,7 +7,7 @@
     Hi there 👋
   </span>
     <div class="welcome-description">
-      Need help? Search our help center for answers or start a conversation:
+      Need help? Welcome to our help center for answers. Start the conversation:
     </div>
   </div>
 </template>
