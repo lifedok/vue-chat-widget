@@ -152,6 +152,7 @@ const closeDialog = () => {
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  flex-wrap: wrap;
 }
 
 .settings-dialog-remove {

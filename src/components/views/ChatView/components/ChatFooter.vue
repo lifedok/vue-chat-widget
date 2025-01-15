@@ -56,7 +56,7 @@ onMounted(() => {
       v-model="message"
       rows="1"
       @input="adjustTextareaHeight"
-      :placeholder="'Type here and press enter..'"
+      :placeholder="'Type and press enter..'"
       @keydown.enter.prevent="sendMessage"
       :style="{ height: textareaHeight + 'px' }"
     />
@@ -94,9 +94,10 @@ onMounted(() => {
   font-size: 14px;
   line-height: 16px;
   color: #ccc;
-  letter-spacing: -1.5px;
+  letter-spacing: -2px;
   padding: 0;
   overflow: hidden;
+  white-space: nowrap;
 }
 
 .chat-actions-part {

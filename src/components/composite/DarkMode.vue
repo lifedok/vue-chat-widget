@@ -22,6 +22,7 @@ const toggleDark = inject('toggleDark', () => {});
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  flex-wrap: wrap;
 }
 .dark-mode-btn {
   display: flex;
